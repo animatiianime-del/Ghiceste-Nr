@@ -17,33 +17,33 @@ Proiect dezvoltat pe arhitectură de Automat de Stări Finite (FSM) folosind o p
 stateDiagram-v2
     [*] --> STARE_OPRIT
 
-    STARE_OPRIT --> STARE_JOC : Apasare Buton A3 (Start)
+    STARE_OPRIT --> STARE_JOC : "Apasare Buton A3 (Start)"
     
     state STARE_JOC {
         [*] --> AsteptareTasta
         
-        AsteptareTasta --> ProcesareCifra : Tasta '0'..'9'
-        ProcesareCifra --> AsteptareTasta : Adauga la numar curent
+        AsteptareTasta --> ProcesareCifra : "Taste 0-9"
+        ProcesareCifra --> AsteptareTasta : "Adauga cifra"
         
-        AsteptareTasta --> ResetareInput : Tasta '*'
-        ResetareInput --> AsteptareTasta : Sterge numarul introdus
+        AsteptareTasta --> ResetareInput : "Tasta *"
+        ResetareInput --> AsteptareTasta : "Sterge numar"
         
-        AsteptareTasta --> VerificareIndiciu : Tasta 'D'
-        VerificareIndiciu --> AsteptareTasta : Penalizare -2V & Afiseaza Numar Secret (2s)
+        AsteptareTasta --> VerificareIndiciu : "Tasta D"
+        VerificareIndiciu --> AsteptareTasta : "Indiciu: -2 Veti"
         
-        AsteptareTasta --> ValidareRaspuns : Tasta '#'
+        AsteptareTasta --> ValidareRaspuns : "Tasta #"
     }
 
-    ValidareRaspuns --> STARE_VICTORIE : NumarIntrodus == NumarSecret
-    ValidareRaspuns --> VerificareVeti : NumarIntrodus != NumarSecret
+    ValidareRaspuns --> STARE_VICTORIE : "Numar Corect"
+    ValidareRaspuns --> VerificareVeti : "Numar Gresit"
 
-    VerificareVeti --> STARE_JOC : Veti > 0 (Bip Eroare, Indicatie ^ / v)
-    VerificareVeti --> STARE_GAME_OVER : Veti == 0
+    VerificareVeti --> STARE_JOC : "Veti > 0"
+    VerificareVeti --> STARE_GAME_OVER : "Veti == 0"
 
-    STARE_VICTORIE --> STARE_JOC : Salvare Record EEPROM & Resetare
-    STARE_GAME_OVER --> STARE_JOC : Afisare Solutie & Resetare
+    STARE_VICTORIE --> STARE_JOC : "Resetare si Salvare EEPROM"
+    STARE_GAME_OVER --> STARE_JOC : "Resetare si Afisare Solutie"
 
-    STARE_JOC --> STARE_OPRIT : Apasare Buton A3 (Stop)
+    STARE_JOC --> STARE_OPRIT : "Apasare Buton A3 (Stop)"
 ```
 
 ## 🎮 Comenzi Tastatură
