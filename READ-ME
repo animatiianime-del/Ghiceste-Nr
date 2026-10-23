@@ -15,43 +15,36 @@ Proiect dezvoltat pe arhitectură de Automat de Stări Finite (FSM) folosind o p
 
 ```mermaid
 flowchart TD
-    Start([Start System]) --> STARE_OPRIT[STARE_OPRIT]
+    Start([Start Sistem]) --> STARE_OPRIT[STARE_OPRIT]
 
-    STARE_OPRIT -->|Apasare Buton A3 - Start| STARE_JOC_BLOCK
+    STARE_OPRIT -->|"Apasare Buton A3 (Start)"| STARE_JOC_BLOCK
 
-    subgraph STARE_JOC_BLOCK [STARE_JOC - Bucle de Control]
-        AsteptareTasta[Așteptare Tastă]
-        ProcesareCifra[Procesare Cifră]
-        ResetareInput[Resetare Input]
-        VerificareIndiciu[Verificare Indiciu]
-        ValidareRaspuns[Validare Răspuns]
+    subgraph STARE_JOC_BLOCK ["STARE_JOC - Bucle de Control"]
+        AsteptareTasta["Asteptare Tasta"]
+        ProcesareCifra["Procesare Cifra"]
+        ResetareInput["Resetare Input"]
+        VerificareIndiciu["Verificare Indiciu"]
+        ValidareRaspuns["Validare Raspuns"]
 
-        AsteptareTasta -->|Taste 0-9| ProcesareCifra
+        AsteptareTasta -->|"Taste 0-9"| ProcesareCifra
         ProcesareCifra --> AsteptareTasta
 
-        AsteptareTasta -->|Tasta *| ResetareInput
+        AsteptareTasta -->|"Tasta *"| ResetareInput
         ResetareInput --> AsteptareTasta
 
-        AsteptareTasta -->|Tasta D| VerificareIndiciu
-        VerificareIndiciu -->|Penalizare -2V| AsteptareTasta
+        AsteptareTasta -->|"Tasta D"| VerificareIndiciu
+        VerificareIndiciu -->|"Penalizare -2 Veti"| AsteptareTasta
 
-        AsteptareTasta -->|Tasta #| ValidareRaspuns
+        AsteptareTasta -->|"Tasta #"| ValidareRaspuns
     end
 
-    ValidareRaspuns -->|Numar Corect| STARE_VICTORIE[STARE_VICTORIE]
-    ValidareRaspuns -->|Numar Gresit| VerificareVeti{Vieți > 0?}
+    ValidareRaspuns -->|"Numar Corect"| STARE_VICTORIE[STARE_VICTORIE]
+    ValidareRaspuns -->|"Numar Gresit"| VerificareVeti{"Veti > 0?"}
 
-    VerificareVeti -->|Da - Sunet Eroare| STARE_JOC_BLOCK
-    VerificareVeti -->|Nu| STARE_GAME_OVER[STARE_GAME_OVER]
+    VerificareVeti -->|"Da (Sunet Eroare)"| STARE_JOC_BLOCK
+    VerificareVeti -->|"Nu"| STARE_GAME_OVER[STARE_GAME_OVER]
 
-    STARE_VICTORIE -->|Resetare și Salvare EEPROM| STARE_JOC_BLOCK
-    STARE_GAME_OVER -->|Resetare și Afișare Soluție| STARE_JOC_BLOCK
+    STARE_VICTORIE -->|"Resetare si Salvare EEPROM"| STARE_JOC_BLOCK
+    STARE_GAME_OVER -->|"Resetare si Afisare Solutie"| STARE_JOC_BLOCK
 
-    STARE_JOC_BLOCK -->|Apasare Buton A3 - Stop| STARE_OPRIT
-```
-
-## 🎮 Comenzi Tastatură
-- `0 - 9`: Introducerea numărului
-- `#`: Enter / Validare răspuns
-- `*`: Ștergere cifră
-- `D`: Indiciu / Trișare (Afișează numărul secret timp de 2 secunde, cost: 2 vieți)
+    STARE_JOC_BLOCK -->|"Apasare Buton A3 (Stop)"| STARE_OPRIT
