@@ -45,6 +45,18 @@ stateDiagram-v2
 
     STARE_JOC --> STARE_OPRIT : "Apasare Buton A3 (Stop)"
 ```
+## 🔌 Schema de Conexiuni (Pinout Table)
+
+| Periferic | Componentă / Funcție | Pin Arduino Uno |
+| :--- | :--- | :--- |
+| **LCD 1602** | RS, E, D4, D5, D6, D7 | `12`, `11`, `5`, `4`, `3`, `2` |
+| **LCD 1602** | Alimentare BLA / VCC / GND | `5V` / `GND` |
+| **Tastatură 4x4** | Linii (Rows 1-4) | `13`, `10`, `9`, `8` |
+| **Tastatură 4x4** | Coloane (Cols 1-4) | `7`, `6`, `A0`, `A1` |
+| **Buton Control** | Start / Stop (INPUT_PULLUP) | `A3` |
+| **Buzzer** | Feedback Acustica (Activ) | `A2` |
+| **LED Roșu** | Indicator Eroare / Limită | `A4` |
+| **LED Verde** | Indicator Victorie | `A5` |
 
 ## 🎮 Comenzi Tastatură
 - `0 - 9`: Introducerea numărului
