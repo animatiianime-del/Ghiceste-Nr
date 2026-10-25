@@ -3,7 +3,8 @@
 #include <EEPROM.h>
 
 // --- CONFIGURARE HARDWARE ---
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+// LiquidCrystal(RS, E, D4, D5, D6, D7)
+LiquidCrystal lcd(A0, A1, A2, A3, A4, A5);
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -13,15 +14,15 @@ char taste[ROWS][COLS] = {
   {'7','8','9','C'},
   {'*','0','#','D'}
 };
-byte rowPin[ROWS] = {13, 10, 9, 8};
-byte colPins[COLS] = {7, 6, A0, A1};
+byte rowPin[ROWS] = {13, 12, 11, 10};
+byte colPins[COLS] = {9, 8, 7, 6};
 Keypad customKeypad = Keypad(makeKeymap(taste), rowPin, colPins, ROWS, COLS);
 
 // Pini Periferice
-const int pinButonStartStop = A3;
-const int pinLedVerde       = A5;
-const int pinLedRosu        = A4;
-const int pinBuzzer         = A2;
+const int pinButonStartStop = 5;
+const int pinLedRosu        = 4;
+const int pinLedVerde       = 3;
+const int pinBuzzer         = 2;
 
 // --- AUTOMAT DE STĂRI (FSM) ---
 enum StareJoc {
@@ -49,7 +50,7 @@ int stareStabilizataButon = HIGH;
 unsigned long ultimulTimpSchimbare = 0;
 const unsigned long TIMP_DEBOUNCE = 50;
 
-// --- FUNCȚII SUNET ---
+// --- FUNCȚII SUNET ȘI SEMNALIZARE ---
 void emitBipScurt() {
   digitalWrite(pinBuzzer, HIGH);
   delay(25);
@@ -132,7 +133,7 @@ void salveazaRecordEEPROM(unsigned long timpNou) {
 
 // --- SETUP ---
 void setup() {
-  randomSeed(analogRead(pinBuzzer));
+  randomSeed(micros());
 
   pinMode(pinLedVerde, OUTPUT);
   pinMode(pinLedRosu, OUTPUT);
@@ -152,7 +153,7 @@ void setup() {
 
 // --- LOOP PRINCIPAL ---
 void loop() {
-  // 1. Filtru Debounce pentru butonul Start/Stop (A3)
+  // 1. Filtru Debounce pentru butonul Start/Stop (Pin 5)
   int lecturaFizicaCurenta = digitalRead(pinButonStartStop);
 
   if (lecturaFizicaCurenta != stareFizicaAnterioara) {
@@ -163,7 +164,7 @@ void loop() {
     if (lecturaFizicaCurenta != stareStabilizataButon) {
       stareStabilizataButon = lecturaFizicaCurenta;
 
-      if (stareStabilizataButon == LOW) {
+      if (stareStabilizataButon == LOW) { // Buton apăsat (conectat la GND prin PULLUP)
         if (stareCurenta == STARE_OPRIT) {
           stareCurenta = STARE_JOC;
           lcd.display();
@@ -200,7 +201,7 @@ void loop() {
           }
           if (numarIntrodus * 10 + (tasta - '0') <= 100) {
             numarIntrodus = numarIntrodus * 10 + (tasta - '0');
-            lcd.setCursor(3, 1);
+            lcd.setCursor(2, 1);
             lcd.print(numarIntrodus);
             lcd.print("   ");
           }
@@ -217,7 +218,7 @@ void loop() {
               
               emitSunetVictorie();
               
-              lcd.print("AI GHICIT! 🎉");
+              lcd.print("AI GHICIT! :-)");
               lcd.setCursor(0, 1);
               lcd.print("T:");
               lcd.print(timpSecunde);
@@ -264,7 +265,7 @@ void loop() {
         else if (tasta == '*') {
           numarIntrodus = 0;
           introducereInceputa = false;
-          lcd.setCursor(3, 1);
+          lcd.setCursor(2, 1);
           lcd.print("   ");
         }
         // D. Tasta D -> FUNCTIA DE INDICIU / TRISARE (PEEK)
